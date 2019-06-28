@@ -1,0 +1,51 @@
+{% extends 'files/base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Файлы на сервере</h2>
+<table class="files-table" >
+<thead>
+<tr>
+	<th>Наименование</th>
+	<th>Размер (байт)</th>
+	<th></th>
+	<th></th>
+</tr>
+</thead>
+
+<tbody id="f-list-table">
+{% for f in files %}
+<tr class="files-row" id="f-row-{{ f.id }}">
+	<td class="file-name-outer"><a class="file-name" href="{% url 'files:show' %}?selected={{ f.id }}">{{ f.name }}</a></td>
+	<td class="file-size">{{ f.size }}</td>
+	<td class="buttons">
+		<form method="post" action="{% url 'files:del' %}" class="file-del-form">
+			{% csrf_token %}
+			<input type="hidden" name="filename" value="{{ f.name }}" class="file-del-filename">
+
+			<button type="submit" class="file-del">Удалить</button>
+		</form>
+	</td>
+	<td><a href="{{ f.url }}" download>Скачать</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+<form method="post" action="{% url 'files:add' %}" enctype="multipart/form-data">
+{% csrf_token %}
+<div>
+	<h3>Добавить новый файл</h3>
+	<input type="file" name="file" class="file-add-input">
+	<button type="submit" class="file-add-btn">Загрузить</button>
+</div>
+</form>
+
+<div>
+	<a href="{% url 'files:show' %}">Перейти к просмотру файлов в браузере</a>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}

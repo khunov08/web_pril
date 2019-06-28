@@ -1,0 +1,27 @@
+{% extends 'files/base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+	<a href="{% url 'files:index' %}">К списку файлов</a>
+</div>
+
+<form>
+	<label for="f-select">Выберите файл для просмотра в браузере.</label>
+	<select id="f-select">
+	{% for f in files %}
+		<option name="{{ f.id }}" value="{{ f.url }}"
+				{% if selected and f.id == selected %}selected{% endif %}>{{ f.name }}</option>
+	{% endfor %}
+	</select>
+	<button type="button" id="f-show-btn">Показать</button>
+</form>
+
+<hr>
+<div id="f-content"></div>
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/show_file.js' %}"></script>
+{% endblock %}
